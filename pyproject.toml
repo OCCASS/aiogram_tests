@@ -1,13 +1,13 @@
 [build-system]
-requires = ["aiogram", "setuptools"]
+requires = ["aiogram ~= 3.0.0b5", "setuptools"]
 
 [project]
-name = "aiogram_unittest"
-version = "0.0.1"
+name = "aiogram_tests"
+version = "1.0.0"
 authors = [
     { name = "Timur", email = "pavlov.timur556@yandex.ru" }
 ]
-description = "A library for unittesting your bots on aiogram"
+description = "A library for testing your bots on aiogram"
 readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -16,4 +16,4 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/OCCCAS/aiogram_unittest"
+"Homepage" = "https://github.com/aiogram-tests/aiogram_tests"
