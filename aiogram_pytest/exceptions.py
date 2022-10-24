@@ -1,0 +1,2 @@
+class MethodIsNotCalledError(Exception):
+    pass

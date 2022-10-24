@@ -1,0 +1,7 @@
+aiogram
+pytest
+pytest-asyncio
+black
+pyupgrade
+reorder-python-imports
+autoflake

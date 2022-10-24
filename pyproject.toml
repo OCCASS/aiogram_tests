@@ -1,0 +1,19 @@
+[build-system]
+requires = ["aiogram", "setuptools"]
+
+[project]
+name = "aiogram_unittest"
+version = "0.0.1"
+authors = [
+    { name = "Timur", email = "pavlov.timur556@yandex.ru" }
+]
+description = "A library for unittesting your bots on aiogram"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/OCCCAS/aiogram_unittest"

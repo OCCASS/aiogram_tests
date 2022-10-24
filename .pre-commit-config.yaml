@@ -1,0 +1,42 @@
+repos:
+  - repo: local
+    hooks:
+      # For reformatting code
+      - id: black
+        name: black
+        entry: black
+        language: python
+        types: [ python ]
+        args: [ --line-length=120, --target-version=py38 ]
+
+      # For upgrade python code syntax for newer versions of the language
+      - id: pyupgrade
+        name: pyupgrade
+        entry: pyupgrade
+        language: python
+        types: [ python ]
+
+      # Tool for automatically reordering python imports
+      - id: reorder-python-imports
+        name: reorder-python-imports
+        entry: reorder-python-imports
+        language: python
+        types: [ python ]
+
+      # Removes unused imports and unused variables from Python code
+      - id: autoflake
+        name: autoflake
+        entry: autoflake
+        language: python
+        types: [ python ]
+        args: [ --in-place, --remove-all-unused-imports, --remove-duplicate-keys ]
+
+      # Run python unittest
+      - id: tests
+        name: unittest
+        entry: python3 -m unittest tests/__main__.py
+        language: python
+        'types': [ python ]
+        pass_filenames: false
+        stages: [ commit ]
+
