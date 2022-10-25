@@ -20,4 +20,7 @@ jobs:
       - name: Build project
         run: |
           python3 -m build
+      - name: Publish to Pypi
+        run: |
+          twine upload dist/* -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
         
