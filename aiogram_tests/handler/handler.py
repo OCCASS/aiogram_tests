@@ -9,7 +9,7 @@ from aiogram.filters import Filter
 from aiogram.filters import StateFilter
 from aiogram.fsm.state import State
 
-from .base import RequestHandler
+from aiogram_tests.requester import RequestHandler
 
 
 class TelegramEventObserverHandler(RequestHandler):
