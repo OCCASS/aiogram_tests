@@ -8,7 +8,5 @@ aiogram = ">=3.0.0"
 pytest = "*"
 pytest-asyncio = "*"
 
-[dev-packages]
-
 [requires]
 python_version = "3.9"
