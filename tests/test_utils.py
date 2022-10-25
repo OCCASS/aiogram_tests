@@ -1,4 +1,4 @@
-from aiogram_pytest.utils import camel_case2snake_case
+from aiogram_tests.utils import camel_case2snake_case
 
 
 def test_camle_case_convertor():
