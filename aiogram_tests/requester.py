@@ -2,7 +2,7 @@ from aiogram.utils.helper import Helper
 from aiogram.utils.helper import Item
 
 from .exceptions import MethodIsNotCalledError
-from .handler import RequestHandler
+from .handler.base import RequestHandler
 from .utils import camel_case2snake_case
 
 
@@ -146,13 +146,14 @@ class Calls:
             return getattr(self, item)
         else:
             raise MethodIsNotCalledError(
-                "method '{}' is not called.\nTry to use: {}".format(item, ", ".join(self._get_attributes()))
+                "method '%s' is not called by bot, so you cant to get this attribute. Called methods: %s"
+                % (item, self._get_attributes())
             )
 
 
 class Requester:
     def __init__(self, *, request_handler: RequestHandler):
-        self._handler = request_handler
+        self._handler: RequestHandler = request_handler
 
     async def query(self, *args, **kwargs) -> Calls:
         await self._handler(*args, **kwargs)
