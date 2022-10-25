@@ -1,7 +1,7 @@
 from aiogram import types
 
-import aiogram_pytest.types.dataset as dataset
-from aiogram_pytest.types.dataset import DatasetItem
+import aiogram_tests.types.dataset as dataset
+from aiogram_tests.types.dataset import DatasetItem
 
 
 def test_as_object():

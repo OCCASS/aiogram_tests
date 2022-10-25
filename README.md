@@ -35,9 +35,9 @@ import pytest
 
 from bot import echo
 
-from aiogram_pytest import Requester
-from aiogram_pytest.handler import MessageHandler
-from aiogram_pytest.types.dataset import MESSAGE
+from aiogram_tests import Requester
+from aiogram_tests.handler import MessageHandler
+from aiogram_tests.types.dataset import MESSAGE
 
 
 @pytest.mark.asyncio
