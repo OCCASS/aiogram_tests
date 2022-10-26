@@ -151,8 +151,8 @@ class Calls:
             )
 
 
-class Requester:
-    def __init__(self, *, request_handler: RequestHandler):
+class MockedBot:
+    def __init__(self, request_handler: RequestHandler):
         self._handler: RequestHandler = request_handler
 
     async def query(self, *args, **kwargs) -> Calls:

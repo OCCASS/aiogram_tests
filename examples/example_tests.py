@@ -9,7 +9,7 @@ from test_bot import message_handler_with_state_data
 from test_bot import States
 from test_bot import TestCallbackData
 
-from aiogram_tests import Requester
+from aiogram_tests import MockedBot
 from aiogram_tests.handler import CallbackQueryHandler
 from aiogram_tests.handler import MessageHandler
 from aiogram_tests.types.dataset import CALLBACK_QUERY
@@ -18,7 +18,7 @@ from aiogram_tests.types.dataset import MESSAGE
 
 @pytest.mark.asyncio
 async def test_message_handler():
-    requester = Requester(request_handler=MessageHandler(message_handler))
+    requester = MockedBot(MessageHandler(message_handler))
     calls = await requester.query(MESSAGE.as_object(text="Hello!"))
     answer_message = calls.send_message.fetchone().text
     assert answer_message == "Hello!"
@@ -26,7 +26,7 @@ async def test_message_handler():
 
 @pytest.mark.asyncio
 async def test_command_handler():
-    requester = Requester(request_handler=MessageHandler(command_handler, Command(commands=["start"])))
+    requester = MockedBot(MessageHandler(command_handler, Command(commands=["start"])))
     calls = await requester.query(MESSAGE.as_object(text="/start"))
     answer_message = calls.send_message.fetchone().text
     assert answer_message == "Hello, new user!"
@@ -34,7 +34,7 @@ async def test_command_handler():
 
 @pytest.mark.asyncio
 async def test_message_handler_with_state():
-    requester = Requester(request_handler=MessageHandler(message_handler_with_state, state=States.state))
+    requester = MockedBot(MessageHandler(message_handler_with_state, state=States.state))
     calls = await requester.query(MESSAGE.as_object(text="Hello, bot!"))
     answer_message = calls.send_message.fetchone().text
     assert answer_message == "Hello, from state!"
@@ -42,7 +42,7 @@ async def test_message_handler_with_state():
 
 @pytest.mark.asyncio
 async def test_callback_query_handler():
-    requester = Requester(request_handler=CallbackQueryHandler(callback_query_handler, TestCallbackData.filter()))
+    requester = MockedBot(CallbackQueryHandler(callback_query_handler, TestCallbackData.filter()))
 
     callback_query = CALLBACK_QUERY.as_object(
         data=TestCallbackData(id=1, name="John").pack(), message=MESSAGE.as_object(text="Hello world!")
@@ -63,9 +63,7 @@ async def test_callback_query_handler():
 
 @pytest.mark.asyncio
 async def test_callback_query_handler_with_state():
-    requester = Requester(
-        request_handler=CallbackQueryHandler(callback_query_handler_with_state, TestCallbackData.filter())
-    )
+    requester = MockedBot(CallbackQueryHandler(callback_query_handler_with_state, TestCallbackData.filter()))
 
     callback_query = CALLBACK_QUERY.as_object(data=TestCallbackData(id=1, name="John").pack())
     calls = await requester.query(callback_query)
@@ -76,10 +74,9 @@ async def test_callback_query_handler_with_state():
 
 @pytest.mark.asyncio
 async def test_handler_with_state_data():
-    requester = Requester(
-        request_handler=MessageHandler(
-            message_handler_with_state_data, state=States.state_1, state_data={"info": "this is message handler"}
-        )
+    requester = MockedBot(
+        MessageHandler(message_handler_with_state_data, state=States.state_1,
+                       state_data={"info": "this is message handler"})
     )
 
     calls = await requester.query(MESSAGE.as_object())
