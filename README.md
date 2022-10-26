@@ -42,7 +42,7 @@ from aiogram_tests.types.dataset import MESSAGE
 
 @pytest.mark.asyncio
 async def test_echo():
-    request = MockedBot(request_handler=MessageHandler(echo))
+    request = MockedBot(MessageHandler(echo))
     calls = await request.query(message=MESSAGE.as_object(text="Hello, Bot!"))
     answer_message = calls.send_messsage.fetchone()
     assert answer_message.text == "Hello, Bot!"
