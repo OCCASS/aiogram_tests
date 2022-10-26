@@ -156,7 +156,11 @@ class Requester:
         self._handler: RequestHandler = request_handler
 
     async def query(self, *args, **kwargs) -> Calls:
-        await self._handler(*args, **kwargs)
+        try:
+            await self._handler(*args, **kwargs)
+        except TypeError as e:
+            raise AttributeError("incorrect argument name. %s" % e)
+
         requests = self._handler.bot.session.requests
         result = {}
         for r in requests:
