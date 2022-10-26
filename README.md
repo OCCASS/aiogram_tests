@@ -1,6 +1,6 @@
-# aiogram_unittest
+# Aiogram Tests
 
-***aiogram_unittest*** is a testing library for bots written on <a href="https://github.com/aiogram/aiogram">aiogram</a>
+***aiogram_tests*** is a testing library for bots written on <a href="https://github.com/aiogram/aiogram">aiogram</a>
 
 ## 📚 Simple examples
 
@@ -49,5 +49,5 @@ async def test_echo():
 
 ```
 
-### ▶️ <a href='https://github.com/OCCCAS/aiogram_unittest/tree/master/examples'>More</a> examples
+### ▶️ <a href='https://github.com/aiogram-tests/aiogram_tests/tree/master/examples'>More</a> examples
 
