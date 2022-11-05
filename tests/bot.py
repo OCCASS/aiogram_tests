@@ -1,6 +1,8 @@
 from aiogram import Dispatcher
 from aiogram import types
+from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import Command
+from aiogram.filters import CommandObject
 from aiogram.filters.callback_data import CallbackData
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State
@@ -19,11 +21,6 @@ dp = Dispatcher(storage=MemoryStorage())
 class States(StatesGroup):
     state = State()
     state_1 = State()
-
-
-@dp.message()
-async def message_handler(message: types.Message, state: FSMContext) -> None:
-    await message.answer(message.text)
 
 
 @dp.message(Command(commands=["start"]))
@@ -55,3 +52,19 @@ async def callback_query_handler_with_state(
     callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext
 ) -> None:
     await callback_query.answer("Hello, from state!")
+
+
+@dp.message(Command(commands="foo"))
+async def foo_command_handler(m: types.Message, command: CommandObject):
+    if command.args == "fail":
+        try:
+            return await m.answer("try to don't failed")
+        except TelegramAPIError:
+            return await m.answer("sorry, i'm failed")
+    else:
+        await m.answer("success")
+
+
+@dp.message()
+async def message_handler(message: types.Message, state: FSMContext) -> None:
+    await message.answer(message.text)

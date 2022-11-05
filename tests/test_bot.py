@@ -6,6 +6,8 @@ from aiogram.methods import SendMessage
 from .bot import callback_query_handler
 from .bot import callback_query_handler_with_state
 from .bot import command_handler
+from .bot import dp
+from .bot import foo_command_handler
 from .bot import message_handler
 from .bot import message_handler_with_state
 from .bot import message_handler_with_state_data
@@ -97,3 +99,22 @@ async def test_handler_with_state_data():
     calls = await requester.query(MESSAGE.as_object())
     answer_message = calls.send_message.fetchone()
     assert answer_message.text == "Info from state data: this is message handler"
+
+
+@pytest.mark.asyncio
+async def test_handler_with_fail():
+    requester = MockedBot(request_handler=MessageHandler(foo_command_handler, dp=dp))
+
+    requester.add_result_for(SendMessage, ok=False, description="Have no rights to send a message", error_code=401)
+    requester.add_result_for(SendMessage, ok=True)
+    calls = await requester.query(MESSAGE.as_object(text="/foo fail"))
+    answer_message = calls.send_message.pop()
+    assert answer_message.text == "sorry, i'm failed"
+    answer_message = calls.send_message.pop()
+    assert answer_message.text == "try to don't failed"
+    assert calls.send_message.fetchone() is None
+
+    requester.add_result_for(SendMessage, ok=True)
+    calls = await requester.query(MESSAGE.as_object(text="/foo"))
+    answer_message = calls.send_message.pop()
+    assert answer_message.text == "success"

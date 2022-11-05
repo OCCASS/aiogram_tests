@@ -25,10 +25,13 @@ class RequestHandler:
         dp_middlewares: Iterable[BaseMiddleware] = None,
         exclude_observer_methods: Iterable[str] = None,
         auto_mock_success: bool = False,
+        dp: Optional[Dispatcher] = None,
         **kwargs,
     ):
         self.bot = MockedBot(auto_mock_success=auto_mock_success)
-        self.dp = Dispatcher(storage=MemoryStorage())
+        if dp is None:
+            dp = Dispatcher(storage=MemoryStorage())
+        self.dp = dp
 
         if dp_middlewares is None:
             dp_middlewares = ()
