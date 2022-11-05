@@ -91,7 +91,7 @@ class MockedBot(Bot):
     async def __call__(self, method: Type[TelegramMethod[TelegramType]], request_timeout: Optional[int] = None):
         if self.auto_mock_success:
             self.add_result_for(method, ok=True)
-        await super().__call__(method, request_timeout)
+        return await super().__call__(method, request_timeout)
 
     def get_request(self) -> Request:
         return self.session.get_request()
