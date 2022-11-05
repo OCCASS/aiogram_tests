@@ -23,7 +23,7 @@ class TelegramEventObserverHandler(RequestHandler):
         exclude_observer_methods: Iterable = None,
         **kwargs,
     ):
-        super().__init__(dp_middlewares, exclude_observer_methods)
+        super().__init__(dp_middlewares, exclude_observer_methods, **kwargs)
 
         self._callback = callback
         self._filters: List = list(filters)

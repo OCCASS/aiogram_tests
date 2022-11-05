@@ -1,11 +1,16 @@
 from typing import Iterable
 from typing import List
+from typing import Optional
+from typing import Type
 
 from aiogram import BaseMiddleware
 from aiogram import Bot
 from aiogram import Dispatcher
 from aiogram.dispatcher.event.telegram import TelegramEventObserver
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.methods import TelegramMethod
+from aiogram.methods.base import Response
+from aiogram.methods.base import TelegramType
 from aiogram.types import Chat
 from aiogram.types import User
 
@@ -19,10 +24,14 @@ class RequestHandler:
         self,
         dp_middlewares: Iterable[BaseMiddleware] = None,
         exclude_observer_methods: Iterable[str] = None,
+        auto_mock_success: bool = False,
+        dp: Optional[Dispatcher] = None,
         **kwargs,
     ):
-        self.bot = MockedBot()
-        self.dp = Dispatcher(storage=MemoryStorage())
+        self.bot = MockedBot(auto_mock_success=auto_mock_success)
+        if dp is None:
+            dp = Dispatcher(storage=MemoryStorage())
+        self.dp = dp
 
         if dp_middlewares is None:
             dp_middlewares = ()
@@ -58,3 +67,24 @@ class RequestHandler:
 
     async def __call__(self, *args, **kwargs):
         raise NotImplementedError
+
+    def add_result_for(
+        self,
+        method: Type[TelegramMethod[TelegramType]],
+        ok: bool,
+        result: TelegramType = None,
+        description: Optional[str] = None,
+        error_code: int = 200,
+        migrate_to_chat_id: Optional[int] = None,
+        retry_after: Optional[int] = None,
+    ) -> Response[TelegramType]:
+        response = self.bot.add_result_for(
+            method=method,
+            ok=ok,
+            result=result,
+            description=description,
+            error_code=error_code,
+            migrate_to_chat_id=migrate_to_chat_id,
+            retry_after=retry_after,
+        )
+        return response

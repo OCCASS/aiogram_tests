@@ -75,8 +75,9 @@ async def test_callback_query_handler_with_state():
 @pytest.mark.asyncio
 async def test_handler_with_state_data():
     requester = MockedBot(
-        MessageHandler(message_handler_with_state_data, state=States.state_1,
-                       state_data={"info": "this is message handler"})
+        MessageHandler(
+            message_handler_with_state_data, state=States.state_1, state_data={"info": "this is message handler"}
+        )
     )
 
     calls = await requester.query(MESSAGE.as_object())

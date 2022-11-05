@@ -1,3 +1,9 @@
+from typing import Optional
+from typing import Type
+
+from aiogram.methods import TelegramMethod
+from aiogram.methods.base import Response
+from aiogram.methods.base import TelegramType
 from aiogram.utils.helper import Helper
 from aiogram.utils.helper import Item
 
@@ -172,6 +178,27 @@ class MockedBot:
             result[method_name].append(self._dict_to_obj(r.data))
 
         return self._generate_result_obj(result)
+
+    def add_result_for(
+        self,
+        method: Type[TelegramMethod[TelegramType]],
+        ok: bool,
+        result: TelegramType = None,
+        description: Optional[str] = None,
+        error_code: int = 200,
+        migrate_to_chat_id: Optional[int] = None,
+        retry_after: Optional[int] = None,
+    ) -> Response[TelegramType]:
+        response = self._handler.add_result_for(
+            method=method,
+            ok=ok,
+            result=result,
+            description=description,
+            error_code=error_code,
+            migrate_to_chat_id=migrate_to_chat_id,
+            retry_after=retry_after,
+        )
+        return response
 
     @staticmethod
     def _dict_to_obj(data: dict):
