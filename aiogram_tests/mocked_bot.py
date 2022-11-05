@@ -24,7 +24,7 @@ class MockedSession(BaseSession):
         self.closed = True
 
     def add_result(self, response: Response[TelegramType]) -> Response[TelegramType]:
-        self.responses.append(response)
+        self.responses.appendleft(response)
         return response
 
     def get_request(self) -> Union[Request, None]:
@@ -52,7 +52,7 @@ class MockedSession(BaseSession):
 
 
 class MockedBot(Bot):
-    def __init__(self, **kwargs):
+    def __init__(self, auto_mock_success=False, **kwargs):
         super().__init__(kwargs.pop("token", "42:TEST"), session=MockedSession(), **kwargs)
         self.session = MockedSession()
         self._me = User(
@@ -63,6 +63,7 @@ class MockedBot(Bot):
             username="username",
             language_code="ru",
         )
+        self.auto_mock_success = auto_mock_success
 
     def add_result_for(
         self,
@@ -88,7 +89,8 @@ class MockedBot(Bot):
         return response
 
     async def __call__(self, method: Type[TelegramMethod[TelegramType]], request_timeout: Optional[int] = None):
-        self.add_result_for(method, ok=True)
+        if self.auto_mock_success:
+            self.add_result_for(method, ok=True)
         await super().__call__(method, request_timeout)
 
     def get_request(self) -> Request:
