@@ -1,5 +1,5 @@
 [build-system]
-requires = ["aiogram ~= 3.0.0b5", "setuptools"]
+requires = ["aiogram ~= 3.0.0b7", "setuptools"]
 
 [project]
 name = "aiogram_tests"
