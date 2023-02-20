@@ -1,4 +1,4 @@
-aiogram==3.0.0b5
+aiogram==3.0.0b7
 pytest
 pytest-asyncio
 black
