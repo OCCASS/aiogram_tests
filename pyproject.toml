@@ -3,7 +3,7 @@ requires = ["aiogram ~= 3.0.0b7", "setuptools"]
 
 [project]
 name = "aiogram_tests"
-version = "1.0.2"
+version = "1.0.4"
 authors = [
     { name = "Timur", email = "pavlov.timur556@yandex.ru" }
 ]
