@@ -15,6 +15,8 @@ from aiogram.types import ResponseParameters
 from aiogram.types import UNSET
 from aiogram.types import User
 
+from aiogram_tests import DEFAULT_AUTO_MOCK_SUCCESS
+
 
 class MockedSession(BaseSession):
     def __init__(self):
@@ -52,7 +54,7 @@ class MockedSession(BaseSession):
 
 
 class MockedBot(Bot):
-    def __init__(self, auto_mock_success=False, **kwargs):
+    def __init__(self, auto_mock_success: bool = DEFAULT_AUTO_MOCK_SUCCESS, **kwargs):
         super().__init__(kwargs.pop("token", "42:TEST"), session=MockedSession(), **kwargs)
         self.session = MockedSession()
         self._me = User(
@@ -88,9 +90,9 @@ class MockedBot(Bot):
         self.session.add_result(response)
         return response
 
-    async def __call__(self, method: Type[TelegramMethod[TelegramType]], request_timeout: Optional[int] = None):
+    async def __call__(self, method: TelegramMethod, request_timeout: Optional[int] = None):
         if self.auto_mock_success:
-            self.add_result_for(method, ok=True)
+            self.add_result_for(method.__class__, ok=True)
         return await super().__call__(method, request_timeout)
 
     def get_request(self) -> Request:
