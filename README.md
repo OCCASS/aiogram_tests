@@ -44,7 +44,7 @@ from aiogram_tests.types.dataset import MESSAGE
 async def test_echo():
     request = MockedBot(MessageHandler(echo))
     calls = await request.query(message=MESSAGE.as_object(text="Hello, Bot!"))
-    answer_message = calls.send_messsage.fetchone()
+    answer_message = calls.send_message.fetchone()
     assert answer_message.text == "Hello, Bot!"
 
 ```
