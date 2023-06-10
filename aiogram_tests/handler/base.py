@@ -14,8 +14,8 @@ from aiogram.methods.base import TelegramType
 from aiogram.types import Chat
 from aiogram.types import User
 
-from aiogram_tests import DEFAULT_AUTO_MOCK_SUCCESS
 from aiogram_tests.mocked_bot import MockedBot
+from aiogram_tests.mocked_bot import DEFAULT_AUTO_MOCK_SUCCESS
 from aiogram_tests.types.dataset import CHAT
 from aiogram_tests.types.dataset import USER
 

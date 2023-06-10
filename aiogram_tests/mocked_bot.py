@@ -15,7 +15,8 @@ from aiogram.types import ResponseParameters
 from aiogram.types import UNSET
 from aiogram.types import User
 
-from aiogram_tests import DEFAULT_AUTO_MOCK_SUCCESS
+
+DEFAULT_AUTO_MOCK_SUCCESS = True
 
 
 class MockedSession(BaseSession):
