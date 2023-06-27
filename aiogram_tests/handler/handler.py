@@ -15,15 +15,15 @@ from .base import RequestHandler
 
 class TelegramEventObserverHandler(RequestHandler):
     def __init__(
-        self,
-        callback: Callable,
-        *filters: Filter,
-        state: Union[State, str, None] = None,
-        state_data: Dict = None,
-        state_context: Union[FSMContext, None] = None,
-        dp_middlewares: Iterable = None,
-        exclude_observer_methods: Iterable = None,
-        **kwargs,
+            self,
+            callback: Callable,
+            *filters: Filter,
+            state: Union[State, str, None] = None,
+            state_data: Dict = None,
+            state_context: Union[FSMContext, None] = None,
+            dp_middlewares: Iterable = None,
+            exclude_observer_methods: Iterable = None,
+            **kwargs,
     ):
         super().__init__(dp_middlewares, exclude_observer_methods, **kwargs)
 
@@ -38,7 +38,8 @@ class TelegramEventObserverHandler(RequestHandler):
 
         if self._state_context:
             self._state_context = state_context
-        elif self._state_data is None:
+
+        if self._state_data is None:
             self._state_data = {}
 
         if self._filters is None:
@@ -52,6 +53,16 @@ class TelegramEventObserverHandler(RequestHandler):
             self._filters.append(StateFilter(self._state))
 
         self.register_handler()
+
+        if self._state_context:
+            old_state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
+            old_state.set_state()
+
+            new_state = await self._state_context.get_state()
+            new_state_data = await self._state_context.get_data()
+
+            await old_state.set_state(new_state)
+            await old_state.update_data(**new_state_data)
 
         if self._state and not self._state_context:
             state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
@@ -89,3 +100,4 @@ class CallbackQueryHandler(TelegramEventObserverHandler):
 
     async def feed_update(self, callback_query: types.CallbackQuery, *args, **kwargs) -> None:
         await self.dp.feed_update(self.bot, types.Update(update_id=12345678, callback_query=callback_query))
+
