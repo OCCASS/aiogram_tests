@@ -8,6 +8,7 @@ from aiogram import types
 from aiogram.filters import Filter
 from aiogram.filters import StateFilter
 from aiogram.fsm.state import State
+from aiogram.fsm.context import FSMContext
 
 from .base import RequestHandler
 
@@ -19,18 +20,25 @@ class TelegramEventObserverHandler(RequestHandler):
         *filters: Filter,
         state: Union[State, str, None] = None,
         state_data: Dict = None,
+        state_context: Union[FSMContext, None] = None,
         dp_middlewares: Iterable = None,
         exclude_observer_methods: Iterable = None,
         **kwargs,
     ):
         super().__init__(dp_middlewares, exclude_observer_methods, **kwargs)
 
+        if state_context:
+            assert not state and not state_data
+
         self._callback = callback
         self._filters: List = list(filters)
         self._state: Union[State, str, None] = state
         self._state_data: Dict = state_data
+        self._state_context: FSMContext = state_context
 
-        if self._state_data is None:
+        if self._state_context:
+            self._state_context = state_context
+        elif self._state_data is None:
             self._state_data = {}
 
         if self._filters is None:
@@ -45,7 +53,7 @@ class TelegramEventObserverHandler(RequestHandler):
 
         self.register_handler()
 
-        if self._state:
+        if self._state and not self._state_context:
             state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
             await state.set_state(self._state)
             await state.update_data(**self._state_data)
@@ -68,26 +76,6 @@ class TelegramEventObserverHandler(RequestHandler):
 
 
 class MessageHandler(TelegramEventObserverHandler):
-    def __init__(
-        self,
-        callback: Callable,
-        *filters: Filter,
-        state: Union[State, str, None] = None,
-        state_data: Dict = None,
-        dp_middlewares: Iterable = None,
-        exclude_observer_methods: Iterable = None,
-        **kwargs,
-    ):
-        super().__init__(
-            callback,
-            *filters,
-            state=state,
-            state_data=state_data,
-            dp_middlewares=dp_middlewares,
-            exclude_observer_methods=exclude_observer_methods,
-            **kwargs,
-        )
-
     def register_handler(self) -> None:
         self.dp.message.register(self._callback, *self._filters)
 
@@ -96,26 +84,6 @@ class MessageHandler(TelegramEventObserverHandler):
 
 
 class CallbackQueryHandler(TelegramEventObserverHandler):
-    def __init__(
-        self,
-        callback: Callable,
-        *filters: Filter,
-        state: Union[State, str, None] = None,
-        state_data: Dict = None,
-        dp_middlewares: Iterable = None,
-        exclude_observer_methods: Iterable = None,
-        **kwargs,
-    ):
-        super().__init__(
-            callback,
-            *filters,
-            state=state,
-            state_data=state_data,
-            dp_middlewares=dp_middlewares,
-            exclude_observer_methods=exclude_observer_methods,
-            **kwargs,
-        )
-
     def register_handler(self) -> None:
         self.dp.callback_query.register(self._callback, *self._filters)
 
