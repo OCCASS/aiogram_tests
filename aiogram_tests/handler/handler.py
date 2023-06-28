@@ -55,12 +55,10 @@ class TelegramEventObserverHandler(RequestHandler):
         self.register_handler()
 
         if self._state_context:
-            old_state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
-            old_state.set_state()
-
             new_state = await self._state_context.get_state()
             new_state_data = await self._state_context.get_data()
 
+            old_state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
             await old_state.set_state(new_state)
             await old_state.update_data(**new_state_data)
 
