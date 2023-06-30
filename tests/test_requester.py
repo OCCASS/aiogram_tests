@@ -4,7 +4,7 @@ from aiogram_tests.exceptions import MethodIsNotCalledError
 from aiogram_tests.handler import MessageHandler
 from aiogram_tests.requester import Calls
 from aiogram_tests.requester import CallsList
-from aiogram_tests.requester import MockedBot
+from aiogram_tests.requester import MockedRequester
 from aiogram_tests.types.dataset import MESSAGE
 
 
@@ -28,7 +28,7 @@ async def test_requester():
         pass
 
     request_handler = MessageHandler(callback)
-    requester = MockedBot(request_handler=request_handler)
+    requester = MockedRequester(request_handler=request_handler)
     calls = await requester.query(message=MESSAGE.as_object(text="Hello world!"))
     assert isinstance(calls, Calls)
     with pytest.raises(MethodIsNotCalledError):

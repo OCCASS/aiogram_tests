@@ -14,7 +14,7 @@ from aiogram.methods.base import TelegramType
 from aiogram.types import Chat
 from aiogram.types import User
 
-from aiogram_tests.mocked_bot import MockedBot
+from aiogram_tests.mocked_bot import MockedRequester
 from aiogram_tests.mocked_bot import DEFAULT_AUTO_MOCK_SUCCESS
 from aiogram_tests.types.dataset import CHAT
 from aiogram_tests.types.dataset import USER
@@ -29,7 +29,7 @@ class RequestHandler:
         dp: Optional[Dispatcher] = None,
         **kwargs,
     ):
-        self.bot = MockedBot(auto_mock_success=auto_mock_success)
+        self.bot = MockedRequester(auto_mock_success=auto_mock_success)
         if dp is None:
             dp = Dispatcher(storage=MemoryStorage())
         self.dp = dp
