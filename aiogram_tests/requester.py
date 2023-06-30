@@ -43,7 +43,7 @@ class Calls:
             )
 
 
-class MockedBot:
+class MockedRequester:
     def __init__(self, request_handler: RequestHandler):
         self._handler: RequestHandler = request_handler
 

@@ -27,9 +27,6 @@ class TelegramEventObserverHandler(RequestHandler):
     ):
         super().__init__(dp_middlewares, exclude_observer_methods, **kwargs)
 
-        if state_context:
-            assert not state and not state_data
-
         self._callback = callback
         self._filters: List = list(filters)
         self._state: Union[State, str, None] = state
@@ -54,15 +51,7 @@ class TelegramEventObserverHandler(RequestHandler):
 
         self.register_handler()
 
-        if self._state_context:
-            new_state = await self._state_context.get_state()
-            new_state_data = await self._state_context.get_data()
-
-            old_state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
-            await old_state.set_state(new_state)
-            await old_state.update_data(**new_state_data)
-
-        if self._state and not self._state_context:
+        if self._state_context or self._state:
             state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
             await state.set_state(self._state)
             await state.update_data(**self._state_data)
