@@ -54,7 +54,7 @@ class MockedSession(BaseSession):
         yield b""
 
 
-class MockedRequester(Bot):
+class MockedBot(Bot):
     def __init__(self, auto_mock_success: bool = DEFAULT_AUTO_MOCK_SUCCESS, **kwargs):
         super().__init__(kwargs.pop("token", "42:TEST"), session=MockedSession(), **kwargs)
         self.session = MockedSession()
