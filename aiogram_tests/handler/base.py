@@ -15,6 +15,7 @@ from aiogram.types import Chat
 from aiogram.types import User
 
 from aiogram_tests.mocked_bot import MockedBot
+from aiogram_tests.mocked_bot import DEFAULT_AUTO_MOCK_SUCCESS
 from aiogram_tests.types.dataset import CHAT
 from aiogram_tests.types.dataset import USER
 
@@ -24,7 +25,7 @@ class RequestHandler:
         self,
         dp_middlewares: Iterable[BaseMiddleware] = None,
         exclude_observer_methods: Iterable[str] = None,
-        auto_mock_success: bool = False,
+        auto_mock_success: bool = DEFAULT_AUTO_MOCK_SUCCESS,
         dp: Optional[Dispatcher] = None,
         **kwargs,
     ):

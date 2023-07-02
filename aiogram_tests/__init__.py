@@ -1,4 +1,5 @@
-from .requester import MockedBot
+from .requester import MockedRequester
 
-__all__ = ["MockedBot"]
-__version__ = "1.0.1"
+__all__ = ["MockedRequester"]
+__version__ = "1.0.4"
+

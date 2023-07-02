@@ -13,7 +13,7 @@ from .bot import message_handler_with_state
 from .bot import message_handler_with_state_data
 from .bot import States
 from .bot import TestCallbackData
-from aiogram_tests import MockedBot
+from aiogram_tests.requester import MockedRequester
 from aiogram_tests.handler import CallbackQueryHandler
 from aiogram_tests.handler import MessageHandler
 from aiogram_tests.types.dataset import CALLBACK_QUERY
@@ -22,7 +22,7 @@ from aiogram_tests.types.dataset import MESSAGE
 
 @pytest.mark.asyncio
 async def test_message_handler():
-    requester = MockedBot(request_handler=MessageHandler(message_handler, auto_mock_success=True))
+    requester = MockedRequester(request_handler=MessageHandler(message_handler, auto_mock_success=True))
     calls = await requester.query(MESSAGE.as_object(text="Hello!"))
     answer_message = calls.send_message.fetchone().text
     assert answer_message == "Hello!"
@@ -30,7 +30,7 @@ async def test_message_handler():
 
 @pytest.mark.asyncio
 async def test_command_handler():
-    requester = MockedBot(request_handler=MessageHandler(command_handler, Command(commands=["start"])))
+    requester = MockedRequester(request_handler=MessageHandler(command_handler, Command(commands=["start"])))
     requester.add_result_for(SendMessage, ok=True)
     calls = await requester.query(MESSAGE.as_object(text="/start"))
     answer_message = calls.send_message.fetchone().text
@@ -39,7 +39,7 @@ async def test_command_handler():
 
 @pytest.mark.asyncio
 async def test_message_handler_with_state():
-    requester = MockedBot(request_handler=MessageHandler(message_handler_with_state, state=States.state))
+    requester = MockedRequester(request_handler=MessageHandler(message_handler_with_state, state=States.state))
     requester.add_result_for(SendMessage, ok=True)
     calls = await requester.query(MESSAGE.as_object(text="Hello, bot!"))
     answer_message = calls.send_message.fetchone().text
@@ -48,7 +48,7 @@ async def test_message_handler_with_state():
 
 @pytest.mark.asyncio
 async def test_callback_query_handler():
-    requester = MockedBot(request_handler=CallbackQueryHandler(callback_query_handler, TestCallbackData.filter()))
+    requester = MockedRequester(request_handler=CallbackQueryHandler(callback_query_handler, TestCallbackData.filter()))
     requester.add_result_for(AnswerCallbackQuery, ok=True)
     requester.add_result_for(SendMessage, ok=True)
 
@@ -73,7 +73,7 @@ async def test_callback_query_handler():
 
 @pytest.mark.asyncio
 async def test_callback_query_handler_with_state():
-    requester = MockedBot(
+    requester = MockedRequester(
         request_handler=CallbackQueryHandler(callback_query_handler_with_state, TestCallbackData.filter())
     )
 
@@ -89,7 +89,7 @@ async def test_callback_query_handler_with_state():
 
 @pytest.mark.asyncio
 async def test_handler_with_state_data():
-    requester = MockedBot(
+    requester = MockedRequester(
         request_handler=MessageHandler(
             message_handler_with_state_data, state=States.state_1, state_data={"info": "this is message handler"}
         )
@@ -103,7 +103,7 @@ async def test_handler_with_state_data():
 
 @pytest.mark.asyncio
 async def test_handler_with_fail():
-    requester = MockedBot(request_handler=MessageHandler(foo_command_handler, dp=dp))
+    requester = MockedRequester(request_handler=MessageHandler(foo_command_handler, dp=dp))
 
     requester.add_result_for(SendMessage, ok=False, description="Have no rights to send a message", error_code=401)
     requester.add_result_for(SendMessage, ok=True)
