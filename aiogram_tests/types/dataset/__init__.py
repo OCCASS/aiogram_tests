@@ -118,7 +118,13 @@ DOCUMENT = DatasetItem(
 )
 
 ANIMATION = DatasetItem(
-    {"file_id": "file_id", "file_unique_id": "file_unique_id", "width": 50, "height": 50, "duration": 50},
+    {
+        "file_id": "file_id",
+        "file_unique_id": "file_unique_id",
+        "width": 50,
+        "height": 50,
+        "duration": 50,
+    },
     model=types.Animation,
 )
 
@@ -291,7 +297,14 @@ VOICE = DatasetItem(
 )
 
 CALLBACK_QUERY = DatasetItem(
-    {"id": 12345678, "chat_instance": "AABBCC", "from": USER, "chat": CHAT, "data": "data"}, model=types.CallbackQuery
+    {
+        "id": "12345678",
+        "chat_instance": "AABBCC",
+        "from": USER,
+        "chat": CHAT,
+        "data": "data",
+    },
+    model=types.CallbackQuery,
 )
 
 CHANNEL = DatasetItem(
@@ -304,7 +317,13 @@ CHANNEL = DatasetItem(
 )
 
 CHANNEL_POST = DatasetItem(
-    {"message_id": 12345, "sender_chat": CHANNEL, "chat": CHANNEL, "date": 1508825372, "text": "Hi, channel!"},
+    {
+        "message_id": 12345,
+        "sender_chat": CHANNEL,
+        "chat": CHANNEL,
+        "date": 1508825372,
+        "text": "Hi, channel!",
+    },
     model=types.Message,
 )
 
@@ -342,13 +361,27 @@ FORWARDED_MESSAGE = DatasetItem(
         "forward_from_message_id": 123,
         "forward_date": 1522749037,
         "text": "Forwarded text with entities from public channel ",
-        "entities": [ENTITY_BOLD, ENTITY_CODE, ENTITY_ITALIC, ENTITY_LINK, ENTITY_LINK, ENTITY_MENTION, ENTITY_PRE],
+        "entities": [
+            ENTITY_BOLD,
+            ENTITY_CODE,
+            ENTITY_ITALIC,
+            ENTITY_LINK,
+            ENTITY_LINK,
+            ENTITY_MENTION,
+            ENTITY_PRE,
+        ],
     },
     model=types.Message,
 )
 
 MESSAGE = DatasetItem(
-    {"message_id": 11223, "from": USER, "chat": CHAT, "date": 1508709711, "text": "Hi, world!"},
+    {
+        "message_id": 11223,
+        "from": USER,
+        "chat": CHAT,
+        "date": 1508709711,
+        "text": "Hi, world!",
+    },
     model=types.Message,
 )
 
@@ -376,7 +409,8 @@ MESSAGE_WITH_CONTACT = DatasetItem(
 )
 
 MESSAGE_WITH_DICE = DatasetItem(
-    {"message_id": 12345, "from": USER, "chat": CHAT, "date": 1508768012, "dice": DICE}, model=types.Message
+    {"message_id": 12345, "from": USER, "chat": CHAT, "date": 1508768012, "dice": DICE},
+    model=types.Message,
 )
 
 MESSAGE_WITH_DOCUMENT = DatasetItem(
@@ -593,7 +627,12 @@ USER_PROFILE_PHOTOS = DatasetItem(
 )
 
 FILE = DatasetItem(
-    {"file_id": "XXXYYYZZZ", "file_size": 5254, "file_path": "voice/file_8", "file_unique_id": "file_unique_id"},
+    {
+        "file_id": "XXXYYYZZZ",
+        "file_size": 5254,
+        "file_path": "voice/file_8",
+        "file_unique_id": "file_unique_id",
+    },
     model=types.File,
 )
 

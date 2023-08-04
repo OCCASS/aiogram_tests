@@ -37,7 +37,7 @@ class DatasetItem(Mapping):
         except (AttributeError, TypeError):
             return None
 
-    def _recursive_as_object(self, data: dict, model: Any):
+    def _recursive_as_object(self, data: dict[str, "DatasetItem"], model: Any):
         """
         This method is converting dict data to object, if one of the params is the DatasetItem method will be
         recursive convert it;
@@ -55,7 +55,9 @@ class DatasetItem(Mapping):
                     if not isinstance(item, (DatasetItem, list)):
                         continue
 
-                    result_data[key][index] = self._recursive_as_object(item.data, item.model)
+                    result_data[key][index] = self._recursive_as_object(
+                        item.data, item.model
+                    )
 
         return model(**result_data)
 

@@ -8,7 +8,11 @@ def test_as_object():
     dataset_item = DatasetItem({"firstArg": 1, "secondArg": 2})
     assert dataset_item.as_object() == {"firstArg": 1, "secondArg": 2}
     assert dataset_item.as_object(firstArg=3) == {"firstArg": 3, "secondArg": 2}
-    assert dataset_item.as_object(thirdArg=3) == {"firstArg": 1, "secondArg": 2, "thirdArg": 3}
+    assert dataset_item.as_object(thirdArg=3) == {
+        "firstArg": 1,
+        "secondArg": 2,
+        "thirdArg": 3,
+    }
 
 
 def test_as_object_converting():
@@ -23,10 +27,18 @@ def test_as_object_converting():
         model=types.User,
     )
     assert dataset_item.as_object() == types.User(
-        id=12345678, is_bot=False, first_name="FirstName", last_name="LastName", username="username"
+        id=12345678,
+        is_bot=False,
+        first_name="FirstName",
+        last_name="LastName",
+        username="username",
     )
     assert dataset_item.as_object(first_name="EditedFirstName") == types.User(
-        id=12345678, is_bot=False, first_name="EditedFirstName", last_name="LastName", username="username"
+        id=12345678,
+        is_bot=False,
+        first_name="EditedFirstName",
+        last_name="LastName",
+        username="username",
     )
     assert dataset_item.as_object(language_code="ru") == types.User(
         id=12345678,
@@ -64,9 +76,19 @@ def test_as_object_converting_with_nesting():
     assert dataset_item.as_object() == types.Message(
         message_id=11223,
         from_user=types.User(
-            id=12345678, is_bot=False, first_name="FirstName", last_name="LastName", username="username"
+            id=12345678,
+            is_bot=False,
+            first_name="FirstName",
+            last_name="LastName",
+            username="username",
         ),
-        chat=types.Chat(id=12345678, first_name="FirstName", last_name="LastName", username="username", type="private"),
+        chat=types.Chat(
+            id=12345678,
+            first_name="FirstName",
+            last_name="LastName",
+            username="username",
+            type="private",
+        ),
         date=1508709711,
         text="Hi, world!",
     )
