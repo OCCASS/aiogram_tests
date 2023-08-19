@@ -127,3 +127,35 @@ class CallbackQueryHandler(TelegramEventObserverHandler):
         await self.dp.feed_update(
             self.bot, types.Update(update_id=12345678, callback_query=callback_query)
         )
+
+
+class MyChatMemberHandler(TelegramEventObserverHandler):
+    def __init__(
+        self,
+        callback: Callable,
+        *filters: Filter,
+        state: State | str | None = None,
+        state_data: dict[str, Any] | None = None,
+        dp_middlewares: Iterable | None = None,
+        exclude_observer_methods: Iterable | None = None,
+        **kwargs,
+    ):
+        super().__init__(
+            callback,
+            *filters,
+            state=state,
+            state_data=state_data,
+            dp_middlewares=dp_middlewares,
+            exclude_observer_methods=exclude_observer_methods,
+            **kwargs,
+        )
+
+    def register_handler(self) -> None:
+        self.dp.my_chat_member.register(self._callback, *self._filters)
+
+    async def feed_update(
+        self, my_chat_member: types.ChatMemberUpdated, *args, **kwargs
+    ) -> None:
+        await self.dp.feed_update(
+            self.bot, types.Update(update_id=12345678, my_chat_member=my_chat_member)
+        )
