@@ -1,6 +1,3 @@
-from typing import Optional
-from typing import Type
-
 from aiogram.methods import TelegramMethod
 from aiogram.methods.base import Response
 from aiogram.methods.base import TelegramType
@@ -56,24 +53,24 @@ class MockedBot:
         requests = self._handler.bot.session.requests
         result = {}
         for r in requests:
-            method_name = camel_case2snake_case(r.method)
+            method_name = camel_case2snake_case(r.__api_method__)
 
             if method_name not in result:
                 result[method_name] = CallsList()
 
-            result[method_name].append(self._dict_to_obj(r.data))
+            result[method_name].append(self._dict_to_obj(r.dict()))
 
         return self._generate_result_obj(result)
 
     def add_result_for(
         self,
-        method: Type[TelegramMethod[TelegramType]],
+        method: TelegramMethod[TelegramType],
         ok: bool,
-        result: TelegramType = None,
-        description: Optional[str] = None,
+        result: TelegramType | None = None,
+        description: str | None = None,
         error_code: int = 200,
-        migrate_to_chat_id: Optional[int] = None,
-        retry_after: Optional[int] = None,
+        migrate_to_chat_id: int | None = None,
+        retry_after: int | None = None,
     ) -> Response[TelegramType]:
         response = self._handler.add_result_for(
             method=method,

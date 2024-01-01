@@ -1,10 +1,10 @@
 import pytest
 from aiogram.filters import StateFilter
 
-from .middleware import TestMiddleware
 from aiogram_tests.handler import MessageHandler
 from aiogram_tests.handler import RequestHandler
 from aiogram_tests.handler import TelegramEventObserverHandler
+from .middleware import TestMiddleware
 
 
 def test_request_handler_initialization():
@@ -20,7 +20,10 @@ def test_request_handler_dp_middlewares():
     middlewares_count = len(r_h.dp.message.middleware)
     assert middlewares_count == 2
 
-    r_h = RequestHandler(dp_middlewares=(TestMiddleware(), TestMiddleware()), exclude_observer_methods=["message"])
+    r_h = RequestHandler(
+        dp_middlewares=(TestMiddleware(), TestMiddleware()),
+        exclude_observer_methods=["message"],
+    )
     middlewares_count = len(r_h.dp.message.middleware)
     assert middlewares_count == 0
 

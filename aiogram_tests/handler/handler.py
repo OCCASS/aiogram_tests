@@ -1,8 +1,6 @@
-from typing import Callable
-from typing import Dict
+from typing import Callable, Any
 from typing import Iterable
 from typing import List
-from typing import Union
 
 from aiogram import types
 from aiogram.filters import Filter
@@ -17,18 +15,18 @@ class TelegramEventObserverHandler(RequestHandler):
         self,
         callback: Callable,
         *filters: Filter,
-        state: Union[State, str, None] = None,
-        state_data: Dict = None,
-        dp_middlewares: Iterable = None,
-        exclude_observer_methods: Iterable = None,
+        state: State | str | None = None,
+        state_data: dict[str, Any] | None = None,
+        dp_middlewares: Iterable | None = None,
+        exclude_observer_methods: Iterable | None = None,
         **kwargs,
     ):
         super().__init__(dp_middlewares, exclude_observer_methods, **kwargs)
 
         self._callback = callback
         self._filters: List = list(filters)
-        self._state: Union[State, str, None] = state
-        self._state_data: Dict = state_data
+        self._state: State | str | None = state
+        self._state_data: dict[str, Any] | None = state_data
 
         if self._state_data is None:
             self._state_data = {}
@@ -46,7 +44,9 @@ class TelegramEventObserverHandler(RequestHandler):
         self.register_handler()
 
         if self._state:
-            state = self.dp.fsm.get_context(self.bot, user_id=12345678, chat_id=12345678)
+            state = self.dp.fsm.get_context(
+                self.bot, user_id=12345678, chat_id=12345678
+            )
             await state.set_state(self._state)
             await state.update_data(**self._state_data)
 
@@ -72,10 +72,10 @@ class MessageHandler(TelegramEventObserverHandler):
         self,
         callback: Callable,
         *filters: Filter,
-        state: Union[State, str, None] = None,
-        state_data: Dict = None,
-        dp_middlewares: Iterable = None,
-        exclude_observer_methods: Iterable = None,
+        state: State | str | None = None,
+        state_data: dict[str, Any] | None = None,
+        dp_middlewares: Iterable | None = None,
+        exclude_observer_methods: Iterable | None = None,
         **kwargs,
     ):
         super().__init__(
@@ -92,7 +92,9 @@ class MessageHandler(TelegramEventObserverHandler):
         self.dp.message.register(self._callback, *self._filters)
 
     async def feed_update(self, message: types.Message, *args, **kwargs) -> None:
-        await self.dp.feed_update(self.bot, types.Update(update_id=12345678, message=message))
+        await self.dp.feed_update(
+            self.bot, types.Update(update_id=12345678, message=message)
+        )
 
 
 class CallbackQueryHandler(TelegramEventObserverHandler):
@@ -100,10 +102,10 @@ class CallbackQueryHandler(TelegramEventObserverHandler):
         self,
         callback: Callable,
         *filters: Filter,
-        state: Union[State, str, None] = None,
-        state_data: Dict = None,
-        dp_middlewares: Iterable = None,
-        exclude_observer_methods: Iterable = None,
+        state: State | str | None = None,
+        state_data: dict[str, Any] | None = None,
+        dp_middlewares: Iterable | None = None,
+        exclude_observer_methods: Iterable | None = None,
         **kwargs,
     ):
         super().__init__(
@@ -119,5 +121,41 @@ class CallbackQueryHandler(TelegramEventObserverHandler):
     def register_handler(self) -> None:
         self.dp.callback_query.register(self._callback, *self._filters)
 
-    async def feed_update(self, callback_query: types.CallbackQuery, *args, **kwargs) -> None:
-        await self.dp.feed_update(self.bot, types.Update(update_id=12345678, callback_query=callback_query))
+    async def feed_update(
+        self, callback_query: types.CallbackQuery, *args, **kwargs
+    ) -> None:
+        await self.dp.feed_update(
+            self.bot, types.Update(update_id=12345678, callback_query=callback_query)
+        )
+
+
+class MyChatMemberHandler(TelegramEventObserverHandler):
+    def __init__(
+        self,
+        callback: Callable,
+        *filters: Filter,
+        state: State | str | None = None,
+        state_data: dict[str, Any] | None = None,
+        dp_middlewares: Iterable | None = None,
+        exclude_observer_methods: Iterable | None = None,
+        **kwargs,
+    ):
+        super().__init__(
+            callback,
+            *filters,
+            state=state,
+            state_data=state_data,
+            dp_middlewares=dp_middlewares,
+            exclude_observer_methods=exclude_observer_methods,
+            **kwargs,
+        )
+
+    def register_handler(self) -> None:
+        self.dp.my_chat_member.register(self._callback, *self._filters)
+
+    async def feed_update(
+        self, my_chat_member: types.ChatMemberUpdated, *args, **kwargs
+    ) -> None:
+        await self.dp.feed_update(
+            self.bot, types.Update(update_id=12345678, my_chat_member=my_chat_member)
+        )
